@@ -11,12 +11,14 @@ namespace Autonomní_auta
         static void Main(string[] args)
         {
             string Trasa = "CCCCMCCCCCTCCCCC";
+            MeteorologickaStanice Ms = new MeteorologickaStanice();
+            weather PocasiTed = Ms.Zmena();
             AutonomniAuto A = new AutonomniAuto(50, 100);
             List<AutonomniAuto> lA = new List<AutonomniAuto>();
             lA.Add(A);
-            double Doba = A.DobaCesty(A.CestovniRychlost, A.DelkaTrasy);
 
-            Postup += @"Dojeto do cíle";
+
+            Console.WriteLine(PocasiTed);
             Console.ReadLine();
 
         }
@@ -42,11 +44,10 @@ namespace Autonomní_auta
     }
     public class MeteorologickaStanice
     {
-        public int Zmena()
+        public weather Zmena()
         {
             Random nc = new Random();
-
-            return nc.Next(weather);
+            return (weather)nc.Next(Enum.GetNames(typeof(weather)).Length);
         }
     }
 
@@ -59,7 +60,7 @@ namespace Autonomní_auta
 
     public enum weather
     {
-        Clear = 1,
+        Clear = 0,
         Rain,
         Winter,
         Storm
