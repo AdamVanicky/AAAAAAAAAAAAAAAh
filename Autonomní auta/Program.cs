@@ -8,37 +8,46 @@ namespace Autonomní_auta
 {
     class Program
     {
-        public Trasa zmena = Trasa.Cesta;
         static void Main(string[] args)
         {
-            
+            string Trasa = "CCCCMCCCCCTCCCCC";
+            AutonomniAuto A = new AutonomniAuto(50, 100);
+            List<AutonomniAuto> lA = new List<AutonomniAuto>();
+            lA.Add(A);
+            double Doba = A.DobaCesty(A.CestovniRychlost, A.DelkaTrasy);
+
+            Postup += @"Dojeto do cíle";
+            Console.ReadLine();
+
         }
     }
-
-    
-
     public class AutonomniAuto
     {
-        
 
-        public int CestovniRychlost { get; set; }
-        public int DelkaTrasy { get; set; }
+        public double CestovniRychlost { get; set; }
+        public double DelkaTrasy { get; set; }
 
-        public AutonomniAuto(int cestrovnirychlost, int delkatrasy)
+        public AutonomniAuto(double cestovnirychlost, double delkatrasy)
         {
-            CestovniRychlost = cestrovnirychlost;
+            CestovniRychlost = cestovnirychlost;
             DelkaTrasy = delkatrasy;
+
         }
-    }
-
-    public class MeteorologickaStanice
-    {
 
     }
-
     public class RidiciStredisko
     {
+        public delegate void ZmenaPocasi();
+        public delegate void ZmenaTrasy();
+    }
+    public class MeteorologickaStanice
+    {
+        public int Zmena()
+        {
+            Random nc = new Random();
 
+            return nc.Next(weather);
+        }
     }
 
     public enum Trasa
@@ -47,4 +56,13 @@ namespace Autonomní_auta
         Most,
         Tunel
     }
+
+    public enum weather
+    {
+        Clear = 1,
+        Rain,
+        Winter,
+        Storm
+    }
+   
 }
