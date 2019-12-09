@@ -8,49 +8,87 @@ namespace Autonomní_auta
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
-            string Trasa = "CCCCMCCCCCTCCCCC";
-            MeteorologickaStanice Ms = new MeteorologickaStanice();
-            weather PocasiTed = Ms.Zmena();
-            AutonomniAuto A = new AutonomniAuto(50, 100);
-            List<AutonomniAuto> lA = new List<AutonomniAuto>();
-            lA.Add(A);
+            string Cesta = "CCCCMCCCMCTCCCTC"; //16 znaků
+            RidiciStredisko rs = new RidiciStredisko();
+            AutonomniAuto AA = new AutonomniAuto(60);  rs.PridejAuto(AA); rs.Pocasi(rs);
 
 
-            Console.WriteLine(PocasiTed);
+            float AktualniRychlost = AA.CestovniRychlost;
+            foreach (char z in Cesta)
+            {
+                switch(z)
+                {
+                    case 'C':
+                        Console.WriteLine("C");
+                        AktualniRychlost = AA.CestovniRychlost;
+                        break;
+                    case 'M':
+                        Console.WriteLine("M");
+
+                        break;
+                    case 'T':
+                        Console.WriteLine("T");
+                        break;
+                }
+            }
+            Console.WriteLine();
             Console.ReadLine();
 
         }
     }
-    public class AutonomniAuto
-    {
-
-        public double CestovniRychlost { get; set; }
-        public double DelkaTrasy { get; set; }
-
-        public AutonomniAuto(double cestovnirychlost, double delkatrasy)
-        {
-            CestovniRychlost = cestovnirychlost;
-            DelkaTrasy = delkatrasy;
-
-        }
-
-    }
+  
     public class RidiciStredisko
     {
-        public delegate void ZmenaPocasi();
-        public delegate void ZmenaTrasy();
+        
+        public List<AutonomniAuto> Al = new List<AutonomniAuto>();
+        public void PridejAuto(AutonomniAuto A) { Al.Add(A); }
+        
+        public delegate weather ZmenaPocasi();
+        public event ZmenaPocasi zmenapocasi;
+
+        public delegate void ZmenaStavu(char z, int aktualnirychlost, weather aktualnipocasi);
+        public event ZmenaStavu zmenastavu;
+
+        public void Pocasi(RidiciStredisko rs) { rs.zmenapocasi += MeteorologickaStanice.Zmena; }
+        public void Trasa(RidiciStredisko rs) { rs.zmenastavu += rs.ZmenaTrasy; }
+
+        public void ZmenaTrasy(char z, int aktualnirychlost, weather aktualnipocasi)
+        {
+            if (z == 'M')
+            {
+                aktualnirychlost -= 20;
+                aktualnipocasi = zmenapocasi();
+            }
+            else if (z == 'T')
+            {
+
+            }
+        }
+    }
+    public class AutonomniAuto
+    {
+        public float CestovniRychlost;
+        public AutonomniAuto(float cestovnirychlost)
+        {
+            CestovniRychlost = cestovnirychlost;
+        }
+        
     }
     public class MeteorologickaStanice
     {
-        public weather Zmena()
+        
+        public static weather Zmena()
         {
             Random nc = new Random();
-            return (weather)nc.Next(Enum.GetNames(typeof(weather)).Length);
+            weather AP = (weather)nc.Next(Enum.GetNames(typeof(weather)).Length);
+            return AP;
         }
     }
 
+    #region Enumy
     public enum Trasa
     {
         Cesta = 1,
@@ -65,5 +103,5 @@ namespace Autonomní_auta
         Winter,
         Storm
     }
-   
+    #endregion
 }
