@@ -13,28 +13,33 @@ namespace Autonomní_auta
         {
             string Cesta = "CCCCMCCCMCTCCCTC"; //16 znaků
             RidiciStredisko rs = new RidiciStredisko();
-            AutonomniAuto AA = new AutonomniAuto(60);  rs.PridejAuto(AA); rs.Pocasi(rs);
-
-
-            float AktualniRychlost = AA.CestovniRychlost;
+            AutonomniAuto AA = new AutonomniAuto(120);  rs.PridejAuto(AA); rs.Pocasi(rs);
+            rs.Svetla = false;
+            rs.AktualniRychlost = AA.CestovniRychlost;
             foreach (char z in Cesta)
             {
                 switch(z)
                 {
                     case 'C':
-                        Console.WriteLine("C");
-                        AktualniRychlost = AA.CestovniRychlost;
+                        rs.Svetla = false;
+                        rs.AktualniRychlost = AA.CestovniRychlost;
+                        rs.Trasa(rs);
+                        rs.Trasy(z);
+                        Console.WriteLine($"C   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi}");
                         break;
                     case 'M':
-                        Console.WriteLine("M");
-
+                        rs.Trasa(rs);
+                        rs.Trasy(z);
+                        Console.WriteLine($"M   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi}");
                         break;
                     case 'T':
-                        Console.WriteLine("T");
+                        rs.Trasa(rs);
+                        rs.Trasy(z);
+                        Console.WriteLine($"T   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi}");
                         break;
                 }
             }
-            Console.WriteLine();
+            Console.WriteLine("Dojeto");
             Console.ReadLine();
 
         }
@@ -42,29 +47,69 @@ namespace Autonomní_auta
   
     public class RidiciStredisko
     {
-        
+        public float AktualniRychlost;
+        public weather AktualniPocasi;
+        public bool Svetla = false;
         public List<AutonomniAuto> Al = new List<AutonomniAuto>();
         public void PridejAuto(AutonomniAuto A) { Al.Add(A); }
         
         public delegate weather ZmenaPocasi();
         public event ZmenaPocasi zmenapocasi;
 
-        public delegate void ZmenaStavu(char z, int aktualnirychlost, weather aktualnipocasi);
+        public delegate void ZmenaStavu(char z);
         public event ZmenaStavu zmenastavu;
 
         public void Pocasi(RidiciStredisko rs) { rs.zmenapocasi += MeteorologickaStanice.Zmena; }
         public void Trasa(RidiciStredisko rs) { rs.zmenastavu += rs.ZmenaTrasy; }
 
-        public void ZmenaTrasy(char z, int aktualnirychlost, weather aktualnipocasi)
+        public void Trasy(char z)
         {
+            zmenastavu(z);
+        }
+        public void ZmenaTrasy(char z)
+        {
+            
             if (z == 'M')
             {
-                aktualnirychlost -= 20;
-                aktualnipocasi = zmenapocasi();
+                Svetla = false;
+
+                AktualniPocasi = zmenapocasi();
+                switch (AktualniPocasi)
+                {
+                    case weather.Clear:
+                        AktualniRychlost = 40;
+                        break;
+                    case weather.Rain:
+                        AktualniRychlost = 30;
+                        break;
+                    case weather.Storm:
+                        AktualniRychlost = 20;
+                        break;
+                    case weather.Winter:
+                        AktualniRychlost = 10;
+                        break;
+                }
             }
             else if (z == 'T')
             {
-
+                Svetla = true;
+                AktualniRychlost = 35;
+            }
+            else
+            {
+                AktualniPocasi = zmenapocasi();
+                switch (AktualniPocasi)
+                {
+                    case weather.Rain:
+                        AktualniRychlost = 100;
+                        break;
+                    case weather.Storm:
+                        AktualniRychlost = 70;
+                        break;
+                    case weather.Winter:
+                        AktualniRychlost = 50;
+                        break;
+                }
             }
         }
     }
