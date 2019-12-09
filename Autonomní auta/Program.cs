@@ -80,13 +80,13 @@ namespace Autonomní_auta
                         AktualniRychlost = 40;
                         break;
                     case weather.Rain:
-                        AktualniRychlost = 30;
+                        AktualniRychlost = 38;
                         break;
                     case weather.Storm:
-                        AktualniRychlost = 20;
+                        AktualniRychlost = 32;
                         break;
                     case weather.Winter:
-                        AktualniRychlost = 10;
+                        AktualniRychlost = 25;
                         break;
                 }
             }
