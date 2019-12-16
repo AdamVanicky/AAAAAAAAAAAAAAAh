@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Autonomní_auta
 {
@@ -11,20 +12,21 @@ namespace Autonomní_auta
         
         static void Main(string[] args)
         {
-            
+            Timer t;
             RidiciStredisko rs = new RidiciStredisko();
-            rs.PridejAuto(new AutonomniAuto(120, "CCCCMCCCMCTCCCTCCCCCCCC"));
-            rs.PridejAuto(new AutonomniAuto(95, "CCCCMCCCMCTCCCTCCCC"));
-            rs.PridejAuto(new AutonomniAuto(110, "CMMMMCCCMCTCCCTCCCCC"));
-            rs.PridejAuto(new AutonomniAuto(100, "CCCCMCCMCTCTCCCCCCCC"));
-            rs.PridejAuto(new AutonomniAuto(70, "CCCCMCCCMCTCCCTCCCCCCCCCCCCCCMMMCTTTTTCCCCC"));
+            rs.PridejAuto(new AutonomniAuto(120, "CCCCMCCCMCTCCCTCCCCCCCC")); 
+            rs.PridejAuto(new AutonomniAuto(95, "CCCCMCCCMCTCCCTCCCC")); 
+            rs.PridejAuto(new AutonomniAuto(110, "CMMMMCCCMCTCCCTCCCCC")); 
+            rs.PridejAuto(new AutonomniAuto(100, "CCCCMCCMCTCTCCCCCCCC")); 
+            rs.PridejAuto(new AutonomniAuto(70, "CCCCMCCCMCTCCCTCCCCCCCCCCCCCCMMMCTTTTTCCCCC")); 
             rs.Pocasi(rs);
             rs.Svetla = false;
-
+            
             int i = 0;
             foreach(AutonomniAuto AA in rs.Al)
             {
                 Console.WriteLine($"Auto č. {i + 1}");
+                t = new Timer(TimerCallback);
                 foreach (char z in rs.Al[i].JehoCesta)
                 {
                     
@@ -50,18 +52,27 @@ namespace Autonomní_auta
                             Console.WriteLine($"T   {rs.AktualniRychlost}km/h ~ {rs.Svetla}");
                             break;
                     }
+                    System.Threading.Thread.Sleep(500);
                 }
                 i++;
-                System.Threading.Thread.Sleep(2000);
+                t = new Timer(TimerCallback);
+               
             }
             Console.WriteLine("Konec");
             Console.ReadLine();
 
         }
+
+        private static void TimerCallback(Object o)
+        {
+            Console.WriteLine("In TimerCallback: " + DateTime.Now);
+            GC.Collect();
+        }
     }
   
     public class RidiciStredisko
     {
+        public Timer t;
         public float AktualniRychlost;
         public weather AktualniPocasi;
         public bool Svetla = false;
