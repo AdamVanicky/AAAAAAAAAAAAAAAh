@@ -25,17 +25,17 @@ namespace Autonomní_auta
                         rs.AktualniRychlost = AA.CestovniRychlost;
                         rs.Trasa(rs);
                         rs.Trasy(z);
-                        Console.WriteLine($"C   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi}");
+                        Console.WriteLine($"C   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi} ~ {rs.Svetla}");
                         break;
                     case 'M':
                         rs.Trasa(rs);
                         rs.Trasy(z);
-                        Console.WriteLine($"M   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi}");
+                        Console.WriteLine($"M   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi} ~ {rs.Svetla}");
                         break;
                     case 'T':
                         rs.Trasa(rs);
                         rs.Trasy(z);
-                        Console.WriteLine($"T   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi}");
+                        Console.WriteLine($"T   {rs.AktualniRychlost}km/h ~ {rs.Svetla}");
                         break;
                 }
             }
