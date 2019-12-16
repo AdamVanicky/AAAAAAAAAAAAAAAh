@@ -11,35 +11,50 @@ namespace Autonomní_auta
         
         static void Main(string[] args)
         {
-            string Cesta = "CCCCMCCCMCTCCCTC"; //16 znaků
+            
             RidiciStredisko rs = new RidiciStredisko();
-            AutonomniAuto AA = new AutonomniAuto(120);  rs.PridejAuto(AA); rs.Pocasi(rs);
+            rs.PridejAuto(new AutonomniAuto(120, "CCCCMCCCMCTCCCTCCCCCCCC"));
+            rs.PridejAuto(new AutonomniAuto(95, "CCCCMCCCMCTCCCTCCCC"));
+            rs.PridejAuto(new AutonomniAuto(110, "CMMMMCCCMCTCCCTCCCCC"));
+            rs.PridejAuto(new AutonomniAuto(100, "CCCCMCCMCTCTCCCCCCCC"));
+            rs.PridejAuto(new AutonomniAuto(70, "CCCCMCCCMCTCCCTCCCCCCCCCCCCCCMMMCTTTTTCCCCC"));
+            rs.Pocasi(rs);
             rs.Svetla = false;
-            rs.AktualniRychlost = AA.CestovniRychlost;
-            foreach (char z in Cesta)
+
+            int i = 0;
+            foreach(AutonomniAuto AA in rs.Al)
             {
-                switch(z)
+                Console.WriteLine($"Auto č. {i + 1}");
+                foreach (char z in rs.Al[i].JehoCesta)
                 {
-                    case 'C':
-                        rs.Svetla = false;
-                        rs.AktualniRychlost = AA.CestovniRychlost;
-                        rs.Trasa(rs);
-                        rs.Trasy(z);
-                        Console.WriteLine($"C   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi} ~ {rs.Svetla}");
-                        break;
-                    case 'M':
-                        rs.Trasa(rs);
-                        rs.Trasy(z);
-                        Console.WriteLine($"M   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi} ~ {rs.Svetla}");
-                        break;
-                    case 'T':
-                        rs.Trasa(rs);
-                        rs.Trasy(z);
-                        Console.WriteLine($"T   {rs.AktualniRychlost}km/h ~ {rs.Svetla}");
-                        break;
+                    
+                    switch (z)
+                    {
+                        case 'C':
+                            rs.Svetla = false;
+                            rs.AktualniRychlost = rs.Al[i].CestovniRychlost;
+                            rs.Trasa(rs);
+                            rs.Trasy(z);
+                            Console.WriteLine($"C   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi} ~ {rs.Svetla}");
+                            break;
+                        case 'M':
+                            rs.AktualniRychlost = rs.Al[i].CestovniRychlost;
+                            rs.Trasa(rs);
+                            rs.Trasy(z);
+                            Console.WriteLine($"M   {rs.AktualniRychlost}km/h ~ {rs.AktualniPocasi} ~ {rs.Svetla}");
+                            break;
+                        case 'T':
+                            rs.AktualniRychlost = rs.Al[i].CestovniRychlost;
+                            rs.Trasa(rs);
+                            rs.Trasy(z);
+                            Console.WriteLine($"T   {rs.AktualniRychlost}km/h ~ {rs.Svetla}");
+                            break;
+                    }
                 }
+                i++;
+                System.Threading.Thread.Sleep(2000);
             }
-            Console.WriteLine("Dojeto");
+            Console.WriteLine("Konec");
             Console.ReadLine();
 
         }
@@ -112,13 +127,17 @@ namespace Autonomní_auta
                 }
             }
         }
+
+        
     }
     public class AutonomniAuto
     {
         public float CestovniRychlost;
-        public AutonomniAuto(float cestovnirychlost)
+        public string JehoCesta;
+        public AutonomniAuto(float cestovnirychlost, string jehocesta)
         {
             CestovniRychlost = cestovnirychlost;
+            JehoCesta = jehocesta;
         }
         
     }
